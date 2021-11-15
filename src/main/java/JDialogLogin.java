@@ -22,6 +22,11 @@ public class JDialogLogin extends javax.swing.JDialog {
 
     private final CryptographyTools _cryptoTools;
 
+    public boolean isExitByLoginWithErrors() {
+        return _exitByLoginWithErrors;
+    }
+    private boolean _exitByLoginWithErrors;
+
     public String getEmail() {
         return _email;
     }
@@ -74,6 +79,7 @@ public class JDialogLogin extends javax.swing.JDialog {
             return response.getStatusLine().getStatusCode() == 200;
         } catch (Exception e) {
             System.out.println(e);
+            _exitByLoginWithErrors = true;
             return false;
         }
     }
@@ -131,6 +137,11 @@ public class JDialogLogin extends javax.swing.JDialog {
 
         jCheckBoxShowPass.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBoxShowPass.setText("Show Pass");
+        jCheckBoxShowPass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxShowPassActionPerformed(evt);
+            }
+        });
         jPanel2.add(jCheckBoxShowPass);
         jCheckBoxShowPass.setBounds(320, 110, 100, 30);
 
@@ -192,6 +203,14 @@ public class JDialogLogin extends javax.swing.JDialog {
         authenticated = this.login(jTextFieldUsername.getText(), new String(jPasswordField1.getPassword()));
         dispose();
     }//GEN-LAST:event_jButtonLogin1ActionPerformed
+
+    private void jCheckBoxShowPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxShowPassActionPerformed
+        if (jCheckBoxShowPass.isSelected()) {
+            jPasswordField1.setEchoChar((char) 0);
+        } else {
+            jPasswordField1.setEchoChar('*');
+        }
+    }//GEN-LAST:event_jCheckBoxShowPassActionPerformed
 
     /**
      * @param args the command line arguments

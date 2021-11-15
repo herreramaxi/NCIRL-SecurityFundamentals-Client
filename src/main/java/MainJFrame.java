@@ -57,9 +57,12 @@ public class MainJFrame extends javax.swing.JFrame {
         if (!_fLogin.isAuthenticated()) {
             System.out.println("no authenticated");
 
-            if (_fLogin.isExitByLogin())
+            if (_fLogin.isExitByLoginWithErrors()) {
+                JOptionPane.showMessageDialog(this, "There was an error when trying to login, check the logs", "Error", JOptionPane.ERROR_MESSAGE);
+            } else if (_fLogin.isExitByLogin()) {
                 JOptionPane.showMessageDialog(this, "Wrong user credentials, closing application", "Error", JOptionPane.ERROR_MESSAGE);
-
+            }
+            
             System.exit(0);
         }
 
@@ -227,7 +230,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "First name", "Last name", "Email", "Hashed password", "Data (encrypted)", "Data (deencrypted)"
+                "First name", "Last name", "Email", "Hashed password", "Data (encrypted)", "Data (decrypted)"
             }
         ) {
             Class[] types = new Class [] {
@@ -310,11 +313,12 @@ public class MainJFrame extends javax.swing.JFrame {
                         .addComponent(nicknamePlace)
                         .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(PasswLb)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(PasswTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(EmailTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(EmailLb))
+                    .addComponent(EmailLb)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(PasswLb)
+                        .addComponent(EmailTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)

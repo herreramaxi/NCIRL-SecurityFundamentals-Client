@@ -98,11 +98,13 @@
                   </Group>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="PasswLb" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="PasswTf" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="EmailTf" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="EmailLb" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="PasswLb" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="EmailTf" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -191,7 +193,7 @@
                 <Column editable="false" title="Email" type="java.lang.String"/>
                 <Column editable="false" title="Hashed password" type="java.lang.String"/>
                 <Column editable="false" title="Data (encrypted)" type="java.lang.String"/>
-                <Column editable="false" title="Data (deencrypted)" type="java.lang.String"/>
+                <Column editable="false" title="Data (decrypted)" type="java.lang.String"/>
               </Table>
             </Property>
           </Properties>
