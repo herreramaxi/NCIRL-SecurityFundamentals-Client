@@ -76,7 +76,7 @@ public class MainJFrame extends javax.swing.JFrame {
         String hash = _cryptoTools.getHash(firstName + lastName + email + hashedPassword + dataCiphered);
         try {
             HttpClient httpclient = HttpClients.createDefault();
-            HttpPost httppost = new HttpPost(WEBAPI_URL + "/api/user");
+            HttpPost httppost = new HttpPost(WEBAPI_URL + "/api/users/addOrUpdate");
             httppost.addHeader("Authorization", getBasicHeader());
 
             List<NameValuePair> params = new ArrayList<>();
@@ -108,7 +108,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private void getUsers() throws IOException {
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpGet httpget = new HttpGet(WEBAPI_URL + "/api/user");
+        HttpGet httpget = new HttpGet(WEBAPI_URL + "/api/users/getAll");
         httpget.addHeader("Authorization", getBasicHeader());
 
         HttpResponse httpresponse = httpclient.execute(httpget);
