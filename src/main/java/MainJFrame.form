@@ -70,10 +70,13 @@
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="SendButton" min="-2" pref="109" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="NamePlace" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="128" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="SendButton" max="32767" attributes="0"/>
+                  <Component id="jButtonResetDatabase" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="250" max="-2" attributes="0"/>
+              <Component id="NamePlace" pref="11" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="131" max="-2" attributes="0"/>
           </Group>
           <Component id="jSeparator1" alignment="1" max="32767" attributes="0"/>
       </Group>
@@ -81,9 +84,9 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="17" max="32767" attributes="0"/>
               <Component id="CryptograpyLb" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                       <Component id="lastName" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -97,16 +100,19 @@
                       <Component id="firstName" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="PasswTf" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="PasswTf" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonResetDatabase" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <Component id="EmailLb" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="PasswLb" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="EmailTf" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jTextFieldData" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="NickNameLb1" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -114,7 +120,8 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jSeparator1" min="-2" pref="5" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane2" min="-2" pref="200" max="-2" attributes="0"/>
+              <Component id="jScrollPane2" min="-2" pref="155" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -122,7 +129,8 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="SendButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Synchronize"/>
+        <Property name="text" type="java.lang.String" value="Synchronize with server"/>
+        <Property name="toolTipText" type="java.lang.String" value="Send data to server and receivean updated list of users"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SendButtonActionPerformed"/>
@@ -200,5 +208,14 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="jButtonResetDatabase">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Reset database"/>
+        <Property name="toolTipText" type="java.lang.String" value="Test functionality for restoring database, delete all users except admin"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonResetDatabaseActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>

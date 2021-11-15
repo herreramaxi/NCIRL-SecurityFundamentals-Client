@@ -3,9 +3,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -38,7 +35,7 @@ import org.json.JSONObject;
 public class MainJFrame extends javax.swing.JFrame {
 
     private final String WEBAPI_URL = "https://ncirl-sf-ca.herokuapp.com";
-//    private String WEBAPI_URL = "http://localhost:3001";
+    //private String WEBAPI_URL = "http://localhost:3001";
     private final JDialogLogin _fLogin;
     private final CryptographyTools _cryptoTools;
 
@@ -62,7 +59,7 @@ public class MainJFrame extends javax.swing.JFrame {
             } else if (_fLogin.isExitByLogin()) {
                 JOptionPane.showMessageDialog(this, "Wrong user credentials, closing application", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            
+
             System.exit(0);
         }
 
@@ -127,6 +124,31 @@ public class MainJFrame extends javax.swing.JFrame {
         updateTableModel(users);
     }
 
+    private Boolean resetDatabase() throws Exception {
+
+        try {
+            HttpClient httpclient = HttpClients.createDefault();
+            HttpPost httppost = new HttpPost(WEBAPI_URL + "/api/users/resetUsers");
+            httppost.addHeader("Authorization", getBasicHeader());
+
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity entity = response.getEntity();
+
+            if (entity != null) {
+                try (InputStream instream = entity.getContent()) {
+                    BufferedReader b = new BufferedReader(new InputStreamReader(instream));
+                    String resp = b.readLine();
+                    System.out.println(resp);
+                }
+            }
+
+            return response.getStatusLine().getStatusCode() == 200;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
     private String getBasicHeader() {
         String emailPass = _fLogin.getEmail() + ":" + _fLogin.getPasswordHashed();
         String basicToken = new String(Base64.getEncoder().encode(emailPass.getBytes()));
@@ -140,12 +162,6 @@ public class MainJFrame extends javax.swing.JFrame {
         int n = usersData.length();
         for (int i = 0; i < n; ++i) {
             JSONObject user = usersData.getJSONObject(i);
-            System.out.println(user.getString("firstName"));
-            System.out.println(user.getString("lastName"));
-            System.out.println(user.getString("email"));
-            System.out.println(user.getString("password"));
-            System.out.println(user.getString("data"));
-
             User u = new User(user.getString("firstName"),
                     user.getString("lastName"),
                     user.getString("email"),
@@ -199,10 +215,12 @@ public class MainJFrame extends javax.swing.JFrame {
         jTextFieldData = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jButtonResetDatabase = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        SendButton.setText("Synchronize");
+        SendButton.setText("Synchronize with server");
+        SendButton.setToolTipText("Send data to server and receivean updated list of users");
         SendButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SendButtonActionPerformed(evt);
@@ -250,6 +268,14 @@ public class MainJFrame extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable1);
 
+        jButtonResetDatabase.setText("Reset database");
+        jButtonResetDatabase.setToolTipText("Test functionality for restoring database, delete all users except admin");
+        jButtonResetDatabase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonResetDatabaseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -290,18 +316,20 @@ public class MainJFrame extends javax.swing.JFrame {
                             .addComponent(lastName, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
                             .addComponent(PasswTf))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(NamePlace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(128, 128, 128))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(SendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonResetDatabase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(250, 250, 250)
+                .addComponent(NamePlace, javax.swing.GroupLayout.DEFAULT_SIZE, 11, Short.MAX_VALUE)
+                .addGap(131, 131, 131))
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(17, Short.MAX_VALUE)
                 .addComponent(CryptograpyLb)
-                .addGap(24, 24, 24)
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -312,9 +340,11 @@ public class MainJFrame extends javax.swing.JFrame {
                         .addComponent(NamePlace)
                         .addComponent(nicknamePlace)
                         .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PasswTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(PasswTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonResetDatabase))
                     .addComponent(EmailLb)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(PasswLb)
@@ -326,7 +356,8 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45))
         );
 
         pack();
@@ -350,6 +381,29 @@ public class MainJFrame extends javax.swing.JFrame {
             Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_SendButtonActionPerformed
+
+    private void jButtonResetDatabaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResetDatabaseActionPerformed
+        // TODO add your handling code here:
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Please confirm you would like to restore database, delete all users except admin", "Warning", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            System.out.println("reset db");
+            try {
+                Boolean resetSuccesful = resetDatabase();
+
+                if (resetSuccesful) {
+                    JOptionPane.showMessageDialog(this, "The users database was successfully restored");
+                    getUsers();
+                } else {
+                    JOptionPane.showMessageDialog(this, "There was an error when trying to restore users database", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            System.out.println("no reset db");
+        }
+    }//GEN-LAST:event_jButtonResetDatabaseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -406,6 +460,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JPasswordField PasswTf;
     private javax.swing.JButton SendButton;
     private javax.swing.JTextField firstName;
+    private javax.swing.JButton jButtonResetDatabase;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
